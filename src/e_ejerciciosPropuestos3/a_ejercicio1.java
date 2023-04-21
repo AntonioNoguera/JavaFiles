@@ -7,9 +7,16 @@ public class a_ejercicio1 {
 	
 	LA PALABRA STATIC INDICA AL USUARIO QUE EL METODO PERTENECE A LA ISNTANCIA, Y NO ES NECESARIO CREAR UN OBJETO
 	PARA PODER USAR DICHA FUNCION
+	
+	Si declaramos la funcion como static void, solamente esta clase tendra acceso a esta funcion, 
+	para el test(A) fue requerido hacer uso de la palabra reservada public, de esta forma esta clase tiene acceso a esta
+	funcion, estando en otro paquete
+	
 	**/
 	
-	 static void Bienvenida(String nombre) {
+	
+	
+	 public static void Bienvenida(String nombre) {
 		System.out.println("Bienvenido "+nombre+"!, al mundo de JAVA. \nPodras dar solucion a muchos problemas.");
 		System.out.println("");
 	}
