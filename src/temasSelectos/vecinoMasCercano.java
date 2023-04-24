@@ -34,19 +34,48 @@ public class vecinoMasCercano {
 		
 		//Linea que va a seleccionar todo el nodo de la matriz
 		ArrayList<Double> distanciasDelUltimoNodo = matrizDistancias.get(rutaParcial.get(rutaParcial.size()-1));
+		System.out.println("\nNodo Base: "+(rutaParcial.get(rutaParcial.size()-1)));
 		
 		//Linea que despliega la funcion de limpieza del nodo(eliminara los nodos que ya estan en la subruta)
 		ArrayList<Double> listaLimpia = limpiezaDeAspirantes(distanciasDelUltimoNodo,rutaParcial);
 		
-		//For que va a seleccionar el nodo mas cercano.
-		double DistanciaMenor=Double.MAX_VALUE;
+		//For que va a seleccionar el nodo mas cercano. 
 		int nodoSeleccionado=0;
 		
+		//Generacion de ruleta
+		
+		ArrayList<Double> listaAptitudes= new ArrayList<Double>();
+		
+		
+		//Obtencion aptitud Total
+		double aptitudTotal = 0;
+	
 		for(int i=0;i<listaLimpia.size();i++) { 
-			
-			if((listaLimpia.get(i)<DistanciaMenor) && (listaLimpia.get(i)>0)) { 
-				DistanciaMenor=listaLimpia.get(i);
+			if(listaLimpia.get(i)>0){	
+				aptitudTotal+=(1/listaLimpia.get(i));	
+			}
+		}
+		
+		//Generador de Ruleta
+		double acumAptitudes=0;
+		
+		for(int i=0;i<listaLimpia.size();i++) {
+			if(listaLimpia.get(i)>0) {
+				acumAptitudes+=((1/listaLimpia.get(i))/aptitudTotal);
+				System.out.printf("Al nodo %d = %.4f\n",i,(1/listaLimpia.get(i))/aptitudTotal); 
+				listaAptitudes.add(acumAptitudes);
+			}else {
+				listaAptitudes.add(0.0);
+			}
+		}
+	
+		double tiroRuleta=Math.random();
+		System.out.println("Lista de Aptitudes Acum: "+listaAptitudes);
+		
+		for(int i=0;i<listaLimpia.size();i++) {
+			if(tiroRuleta<=listaLimpia.get(i)) {
 				nodoSeleccionado=i;
+				break;
 			}
 		}
 		 
@@ -140,25 +169,18 @@ public class vecinoMasCercano {
 		System.out.println("Nodos Empleados: ");
 		for (int i = 0; i < matrizObtenida.size(); i++) {
 		    ArrayList<Integer> subLista = matrizObtenida.get(i);
-		    System.out.print("[ ");
-		    for (int j = 0; j < subLista.size(); j++) {
-		        System.out.print(subLista.get(j) + ", ");
-		    }
-		    System.out.print("]\n");
+		    System.out.println((i)+".-"+subLista); 
 		}
 		
 		//Generacion de la matriz de distancias
 		ArrayList<ArrayList<Double>> matrizDeDistancias = generarMatrizDistancia(matrizObtenida);
 		
-		//Lectura de matriz de distancia
+		//Lectura de matriz de distancia 
+		
 		System.out.println("\nDistancias entre los nodos: ");
 		for (int i = 0; i < matrizDeDistancias.size(); i++) {
 		    ArrayList<Double> subLista = matrizDeDistancias.get(i);
-		    System.out.print("[ ");
-		    for (int j = 0; j < subLista.size(); j++) {
-		        System.out.print(subLista.get(j) + ", ");
-		    }
-		    System.out.print("]\n");
+		    System.out.println((i)+".-"+subLista); 
 		}
 		
 		//Gereneación de la ruta
@@ -176,11 +198,7 @@ public class vecinoMasCercano {
 		
 		//Impresión de la ruta creada
 		
-		System.out.print("[ ");
-		for(int i=0;i<rutaCreada.size();i++) {
-			System.out.print(rutaCreada.get(i)+", ");
-		} 
-		System.out.print("]");
+		System.out.println("\n\nRuta Obtenida = "+rutaCreada); 
 		
 		obtencionCosto(rutaCreada,matrizDeDistancias);
 	}	
