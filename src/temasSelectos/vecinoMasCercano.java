@@ -9,7 +9,7 @@ public class vecinoMasCercano {
 	static double obtencionCosto(ArrayList<Integer> recorrido, ArrayList<ArrayList<Double>> matrizDistancias) {
 		
 		double costo = 0;
-		System.out.println("\n\nCosto de la ruta Obtenida:");
+		System.out.println("\nCosto de la ruta Obtenida:");
 		for(int i=0;i<(recorrido.size()-1);i++) {
 			ArrayList<Double> nodoInicio = matrizDistancias.get(recorrido.get(i));
 			costo += nodoInicio.get(recorrido.get(i+1)); 
@@ -23,8 +23,9 @@ public class vecinoMasCercano {
 	static ArrayList<Double> limpiezaDeAspirantes(ArrayList<Double> listaSucia, ArrayList<Integer> subRuta){ 
 		
 		for(int i=0;i<listaSucia.size();i++) {
-			
-			if(subRuta.contains(i)){	listaSucia.set(i,-4.2);		}
+			if(subRuta.contains(i)){	
+				listaSucia.set(i,-4.2);		
+			}
 		}
 		
 		return listaSucia;
@@ -68,17 +69,22 @@ public class vecinoMasCercano {
 				listaAptitudes.add(0.0);
 			}
 		}
-	
+		
+		
+		
+		
 		double tiroRuleta=Math.random();
+		System.out.println("Valor Obtenido por ruleta: "+tiroRuleta);
 		System.out.println("Lista de Aptitudes Acum: "+listaAptitudes);
 		
 		for(int i=0;i<listaLimpia.size();i++) {
-			if(tiroRuleta<=listaLimpia.get(i)) {
+			if(tiroRuleta<=listaAptitudes.get(i)) {
+				
 				nodoSeleccionado=i;
 				break;
 			}
 		}
-		 
+		System.out.println("Nodo seleccionado = "+ nodoSeleccionado);
 		return nodoSeleccionado;
 	}
 	
@@ -120,10 +126,8 @@ public class vecinoMasCercano {
 	}
 	
 	static ArrayList<ArrayList<Integer>> generarArreglo(String archivoObjetivo) { 
-		
 		ArrayList<ArrayList<Integer>> nodos = new ArrayList<ArrayList<Integer>>();
 		 
-		
 		String direccion = "C:\\Users\\Antonio Noguera\\workspace-Java Files\\javaFiles\\src\\temasSelectos\\"+archivoObjetivo+".txt";
 		File archivo = new File(direccion);
 		
@@ -162,6 +166,7 @@ public class vecinoMasCercano {
 	}
 	
 	public static void main(String[] args ){
+		
 		//Lectura de la matriz de nodos
 		ArrayList<ArrayList<Integer>> matrizObtenida = generarArreglo("5nodes");
 		
@@ -198,7 +203,7 @@ public class vecinoMasCercano {
 		
 		//Impresión de la ruta creada
 		
-		System.out.println("\n\nRuta Obtenida = "+rutaCreada); 
+		System.out.println("\nRuta Obtenida = "+rutaCreada); 
 		
 		obtencionCosto(rutaCreada,matrizDeDistancias);
 	}	
