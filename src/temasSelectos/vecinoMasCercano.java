@@ -70,9 +70,6 @@ public class vecinoMasCercano {
 			}
 		}
 		
-		
-		
-		
 		double tiroRuleta=Math.random();
 		System.out.println("Valor Obtenido por ruleta: "+tiroRuleta);
 		System.out.println("Lista de Aptitudes Acum: "+listaAptitudes);
