@@ -7,39 +7,69 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class problemaMochila {
+public class problemaMochila extends Thread {
 	
-	private static ArrayList<Double> Pesos = new ArrayList<Double>();
-	private static ArrayList<Double> Valores = new ArrayList<Double>();
-	private static ArrayList<Double> ValorPeso = new ArrayList<Double>();
+	private ArrayList<Double> Pesos = new ArrayList<Double>();
+	private ArrayList<Double> Valores = new ArrayList<Double>();
+	private ArrayList<Double> ValorPeso = new ArrayList<Double>();
 	
-	private static double Capacidad = 0;
+	private double Capacidad = 0;
 	
-	private static ArrayList<ArrayList<Integer>> Soluciones = new ArrayList<ArrayList<Integer>>();
+	private ArrayList<ArrayList<Integer>> Soluciones = new ArrayList<ArrayList<Integer>>();
 	
-	private static ArrayList<Double> Rueda = new ArrayList<Double>();
+	private ArrayList<Double> Rueda = new ArrayList<Double>();
 	
-	private static int miembrosPorGeneracion = 10;
+	private int miembrosPorGeneracion = 10;
 	
-	private static double Sumatoria = 0;
+	private double Sumatoria = 0;
 	
-	static void seleccionDelMejorSubHijo() {
+	public ArrayList<Integer> seleccionDelMejorSubHijo() {
 		
-		ArrayList<Integer> mejorSolucion = Soluciones.get(0);
-		double vSolucion=getValor(mejorSolucion);
+		boolean flagSoluciones = true;
 		
-		for(int i=1;i<Soluciones.size();i++) {
-			if(vSolucion<getValor(Soluciones.get(i)) && getPeso(Soluciones.get(i))<=Capacidad) {
-				mejorSolucion = Soluciones.get(i);
+		ArrayList<Integer> mejorSolucion = new ArrayList<Integer>();
+		double vSolucion = 0;
+		
+		//Ocupo determinar la solucion con un bucle
+		//Por que si no, asumo, que la primer solucion, es valida de capacidad
+		
+		//Si todas las soluciones de la generacion, quedan incapacitadas, tendremos que
+		//Aclaralo por mensaje
+		
+		int iterador=0;
+		
+		do {
+			if(getPeso(Soluciones.get(iterador))<=Capacidad) {
+				mejorSolucion = Soluciones.get(iterador);
+				vSolucion = getValor(mejorSolucion);
+				flagSoluciones=false;
 			}
+			iterador++;
+		}while(flagSoluciones && iterador<Soluciones.size());
+		
+		if(flagSoluciones) {
+			//No hay solucion en esta generacion
+			System.out.println("En esta generacion todas las soluciones han quedado invalidas, por exceder la capacidad.");
+		}else {
+			for(int i=0;i<Soluciones.size();i++) {
+				if(vSolucion<getValor(Soluciones.get(i)) && getPeso(Soluciones.get(i))<=Capacidad) {
+					mejorSolucion = Soluciones.get(i); 
+					vSolucion=getValor(mejorSolucion);
+				}
+			}
+			 
+			
+			System.out.print("Mejor Solucion de la generacion: "+mejorSolucion);
+			System.out.print("\tPeso: "+getPeso(mejorSolucion));
+			System.out.println("\tValor: "+getValor(mejorSolucion));
 		}
 		
-		System.out.print("Mejor Solucion de la generacion: "+mejorSolucion);
-		System.out.print("\tPeso: "+getPeso(mejorSolucion));
-		System.out.print("\tValor: "+getValor(mejorSolucion));
+		
+		
+		return mejorSolucion;
 	}
 	
-	static double getValor(ArrayList<Integer> listaSolucion) {
+	public double getValor(ArrayList<Integer> listaSolucion) {
 		double ValorT=0;
 		
 		for(int i=0;i<listaSolucion.size();i++) {
@@ -50,7 +80,7 @@ public class problemaMochila {
 	}
 	
 	
-	static ArrayList<Integer> conversionDec(ArrayList<Integer> listaSolucion){
+	public ArrayList<Integer> conversionDec(ArrayList<Integer> listaSolucion){
 		
 		ArrayList<Integer> parseDec = new ArrayList<Integer>();
 		
@@ -67,7 +97,7 @@ public class problemaMochila {
 		return parseDec;
 	}
 	
-	static ArrayList<Integer> conversionBool(ArrayList<Integer> listaSolucion){
+	public ArrayList<Integer> conversionBool(ArrayList<Integer> listaSolucion){
 		ArrayList<Integer> parseBool = new ArrayList<Integer>();
 		
 		//System.out.println(listaSolucion);
@@ -85,7 +115,7 @@ public class problemaMochila {
 		return parseBool;
 	}
 	
-	static void apareamientoSoluciones() {  
+	public void apareamientoSoluciones() {  
 		
 		for(int i=0;i<Soluciones.size();i+=2) {
 			//Casillas
@@ -97,34 +127,33 @@ public class problemaMochila {
 			
 			//Soluciones
 			solucionA = conversionBool(Soluciones.get(i));
-			solucionB = conversionBool(Soluciones.get(i+1));
-			
-			System.out.println(solucionA);
-			System.out.println(solucionB);
-			
+			solucionB = conversionBool(Soluciones.get(i+1));  
 			
 			int nodoCambio = (int)(Math.round((Math.random()*(solucionA.size()-1))));
 			
-			System.out.println("Nodo Cambio: "+nodoCambio);
+			//System.out.println("Nodo Cambio: "+nodoCambio);
 			for(int j=0;j<nodoCambio;j++) {
 				
 				aux.add(solucionA.get(j));
 				solucionA.set(j,solucionB.get(j));
 				solucionB.set(j, aux.get(j));
 			}
-			
+			/*
 			System.out.print("Nueva Solucion: "+solucionA);
 			System.out.println("= "+getValor(conversionDec(solucionA)));
 			
 			System.out.print("Nueva Solucion: "+solucionB);
 			System.out.println("= "+getValor(conversionDec(solucionB)));
+			*/
+			this.Soluciones.set(i,conversionDec(solucionA));
+			this.Soluciones.set(i+1,conversionDec(solucionB));
 			 
 		}
 		
 	}
 	
 	
-	static void imprimirSoluciones() {
+	public void imprimirSoluciones() {
 		System.out.println("IMPRIMIENDO SOLUCIONES!!");
 		for(int i=0;i<Soluciones.size();i++) {
 			ArrayList<Integer> Solucion = Soluciones.get(i);
@@ -133,7 +162,7 @@ public class problemaMochila {
 		}
 	}
 	
-	static void aspirantesSoluciones(ArrayList<Double> listaProbabilidades) {
+	public void aspirantesSoluciones(ArrayList<Double> listaProbabilidades) {
 		
 		ArrayList<ArrayList<Integer>> neoSoluciones = new ArrayList<ArrayList<Integer>>();
 		
@@ -145,7 +174,7 @@ public class problemaMochila {
 				if(tiroRuleta<listaProbabilidades.get(j)) {
 					
 					neoSoluciones.add(Soluciones.get(j));
-					System.out.println("Solucion Seleccionada: "+Soluciones.get(j));
+					//System.out.println("Solucion Seleccionada: "+Soluciones.get(j));
 					break;
 					
 				}
@@ -153,11 +182,11 @@ public class problemaMochila {
 			
 		}
 		
-		Soluciones = neoSoluciones;
+		this.Soluciones = neoSoluciones;
 	}
 	
 	//Funciones
-	static ArrayList<Double> aptitudSoluciones() {
+	public ArrayList<Double> aptitudSoluciones() {
 		
 		double aptitudTotal = 0;
 		for(int i=0;i<Soluciones.size();i++) {
@@ -172,12 +201,12 @@ public class problemaMochila {
 			aptAcum.add(acum);
 		}
 		
-		System.out.println("Total de Soluciones ="+aptAcum);
+		//System.out.println("Total de Soluciones ="+aptAcum);
 		return aptAcum;
 		
 	}
 	
-	static double getPeso(ArrayList<Integer> listaSolucion) {
+	public double getPeso(ArrayList<Integer> listaSolucion) {
 		double aptitud=0;
 		
 		for(int i=0;i<listaSolucion.size();i++) {
@@ -187,7 +216,7 @@ public class problemaMochila {
 		return aptitud;
 	}
 	
-	static boolean verificacionDePeso(ArrayList<Integer> listaSolucion, int NuevoObjeto) {
+	public boolean verificacionDePeso(ArrayList<Integer> listaSolucion, int NuevoObjeto) {
 		
 		double PesoAcum=Pesos.get(NuevoObjeto);
 		
@@ -201,13 +230,13 @@ public class problemaMochila {
 		
 	}
 	
-	static void generarSoluciones() {
+	public void generarSoluciones() {
 		for(int i=0;i<miembrosPorGeneracion;i++) {
 			
 			//Nueva Fila
 			ArrayList<Integer> Solucion = new ArrayList<Integer>(); 
 			boolean flagObjetos=true;
-			do {
+			do { 
 				
 				double tiroRuleta=Math.random();  
 				for(int j=0; j<Rueda.size(); j++) {	 
@@ -229,29 +258,28 @@ public class problemaMochila {
 						break;
 					}
 					
-				} 
-				
+				}  
 			}while(flagObjetos); 
-			System.out.println("Solucion Generada: "+Solucion);
-			Soluciones.add(Solucion);
+			//System.out.println("Solucion Generada: "+Solucion);
+			this.Soluciones.add(Solucion);
 		}
 	}
 	
-	static void ruedaDeObjetos() { 
+	public void ruedaDeObjetos() { 
 		
 		double aumProb=0;
 		for(int i=0;i<Pesos.size();i++) { 
 			
 			aumProb+=(ValorPeso.get(i)/Sumatoria);
-			Rueda.add(aumProb);
+			this.Rueda.add(aumProb);
 			
 		}
-		System.out.println("Ruleta de Objetos: "+Rueda);
+		//System.out.println("Ruleta de Objetos: "+Rueda);
 	}
 	
-	static void leerArchivo(String Archivo) { 
+	public void leerArchivo(String Archivo) { 
 		 
-		String direccion = "C:\\Users\\Antonio Noguera\\workspace-Java Files\\javaFiles\\src\\temasSelectosMochila"+Archivo+".txt";
+		String direccion = "C:\\Users\\Antonio Noguera\\workspace-Java Files\\javaFiles\\src\\temasSelectosMochila\\"+Archivo+".txt";
 		File archivo = new File(direccion); 
 		
 		try {
@@ -265,15 +293,15 @@ public class problemaMochila {
 					Double Peso = Double.parseDouble(lineaEncontrada[1]);
 					Double Valor = Double.parseDouble(lineaEncontrada[2]);
 					
-					Pesos.add(Peso); 
-					Valores.add(Valor);
+					this.Pesos.add(Peso); 
+					this.Valores.add(Valor);
 					
-					ValorPeso.add(Valor/Peso);  
+					this.ValorPeso.add(Valor/Peso);  
 					
 					Sumatoria+=(Valor/Peso);
 					
 				}else if(lineaEncontrada.length>1) {
-					Capacidad = Double.parseDouble(lineaEncontrada[1]);
+					this.Capacidad = Double.parseDouble(lineaEncontrada[1]);
 				}
 			}
 			
@@ -289,9 +317,10 @@ public class problemaMochila {
 		//System.out.println(Sumatoria);
 	}
 	
-	//Hilo Principal
-	public static void main(String[] args) {
-		// Funcion que lee el archivo y que genera un arreglo con los valores de la mochila
+	//Hilo Principal 
+	public void run() {
+		// Funcion que lee el archivo y que genera un arreglo con los valores de la mochila 
+		
 		leerArchivo("10Objects");
 		
 		// Se arranca bucle
@@ -309,12 +338,12 @@ public class problemaMochila {
 		
 		// Nueva generacion de soluciones aparece
 		apareamientoSoluciones();
-		
+		 
 		// Fase de perturbacion arranca
 		// Falta averiguar si es rentable
 		
-		//Seleccion de la mejor Solucion
-		seleccionDelMejorSubHijo();
+		//Seleccion de la mejor Solucion 
 		
 	}
+	 
 }
