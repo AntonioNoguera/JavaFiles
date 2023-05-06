@@ -1,4 +1,4 @@
-package temasSelectos;
+package temasSelectosMochila;
 
 //Coded by, Michael Noguera
 
@@ -251,7 +251,7 @@ public class problemaMochila {
 	
 	static void leerArchivo(String Archivo) { 
 		 
-		String direccion = "C:\\Users\\Antonio Noguera\\workspace-Java Files\\javaFiles\\src\\temasSelectos\\"+Archivo+".txt";
+		String direccion = "C:\\Users\\Antonio Noguera\\workspace-Java Files\\javaFiles\\src\\temasSelectosMochila"+Archivo+".txt";
 		File archivo = new File(direccion); 
 		
 		try {
@@ -311,6 +311,9 @@ public class problemaMochila {
 		apareamientoSoluciones();
 		
 		// Fase de perturbacion arranca
+		// Falta averiguar si es rentable
+		
+		//Seleccion de la mejor Solucion
 		seleccionDelMejorSubHijo();
 		
 	}
