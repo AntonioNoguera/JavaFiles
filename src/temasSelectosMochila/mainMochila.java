@@ -11,8 +11,6 @@ public class mainMochila {
 	private static ArrayList<Double> pesoHilo = new ArrayList<Double>();
 	private static ArrayList<Double> valorHilo = new ArrayList<Double>();
 	
-	
-	
 	private static ArrayList<Double> Pesos = new ArrayList<Double>();
 	private static ArrayList<Double> Valores = new ArrayList<Double>();
 	private static ArrayList<Double> ValorPeso = new ArrayList<Double>();
@@ -25,15 +23,13 @@ public class mainMochila {
 	
 	private static double Sumatoria = 0;
 	
-	
-	
 	public void adicionMonitor(int id, ArrayList<Integer> Solucion, double Valor,double Peso) {
 		solucionHilo.set(id,Solucion);
 		valorHilo.set(id,Valor);
 		pesoHilo.set(id,Peso);
 	}
 	
-	static void mejorDeLosHilos() {
+	static ArrayList<Integer> mejorDeLosHilos() {
 		int  mejorSolucion = 0;
 		for(int i=1;i<solucionHilo.size();i++) {
 			if(valorHilo.get(mejorSolucion)<valorHilo.get(i)) {
@@ -41,10 +37,11 @@ public class mainMochila {
 			}
 		}
 		
-		System.out.println("\n\nLa mejor solucion es: "+solucionHilo.get(mejorSolucion));
+		System.out.println("\n\nLa solucion parcial es: "+solucionHilo.get(mejorSolucion));
 		System.out.println("De peso: "+pesoHilo.get(mejorSolucion));
 		System.out.println("Y de valor: "+valorHilo.get(mejorSolucion));
 		
+		return solucionHilo.get(mejorSolucion);
 	}
 	
 	static void ruedaDeObjetos() { 
@@ -56,12 +53,12 @@ public class mainMochila {
 			RuedaObjetos.add(aumProb);
 			
 		}
-		System.out.println("Ruleta de Objetos: "+RuedaObjetos);
+		System.out.println("Ruleta de Objetos: "+RuedaObjetos+"\n\n");
 	}
 	
 	static void leerArchivo(String Archivo) { 
 		 
-		String direccion = "C:\\Users\\Antonio Noguera\\workspace-Java Files\\javaFiles\\src\\temasSelectosMochila\\"+Archivo+".txt";
+		String direccion = "C:\\Users\\Antonio Noguera\\git\\JavaFilesn\\src\\temasSelectosMochila\\"+Archivo+".txt";
 		File archivo = new File(direccion); 
 		
 		try {
@@ -95,8 +92,8 @@ public class mainMochila {
 		
 		System.out.println("Pesos: "+Pesos);
 		System.out.println("Valores: "+Valores);
-		System.out.println("Capacidad de la Mochila: "+Capacidad);
-		System.out.println("Total del Valor/Peso: "+Sumatoria);
+		System.out.println("\nCapacidad de la Mochila: "+Capacidad);
+		System.out.println("\nTotal del Valor/Peso: "+Sumatoria);
 	}
 	
 	public static void main(String[] args) { 
@@ -132,10 +129,8 @@ public class mainMochila {
 	        }
 		}
 		
-		 
-		mejorDeLosHilos();
+		//Mandando a posible busqueda local
+		problemaMochila ultHilo = new problemaMochila(Capacidad,Pesos,Valores,mejorDeLosHilos()); 
+		ultHilo.busquedaLocal();
     }
-	
-	
-
 }
